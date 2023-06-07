@@ -1,37 +1,32 @@
-from encrpytion.Encryption import Encryption
+from models.utils import *
+from encrpytion.encryption import Encryption
+from sqlalchemy import select
+from models.secret import Secret
 
-c = Encryption('klucz')
+if __name__ == '__main__':
+    create_db()
+    master_password = 'master'
 
-data = 'secret data test test test test test test'
+    name = 'name'
+    login = 'login'
+    password = 'a' * 200
+    notes = 'notes'
 
-e = c.encrytp(data)
+    e = Encryption(master_password)
 
-print(c.decrypt(e))
+    encrypted_password = e.encrypt(password)
 
-# from Crypto.Cipher import AES
-# from Crypto.Hash import SHA256
-# import base64
-# import json
-# from Crypto.Util.Padding import pad, unpad
-# from Crypto.Random import get_random_bytes
+    with get_session() as session:
+        s = Secret(name, login, encrypted_password, notes)
+        session.add(s)
+        session.commit()
 
-# def gen_key(key: str):
-#     return SHA256.new(key.encode()).digest()
+    with get_session() as session:
+        statement = select(Secret)
+        x = session.execute(statement).all()
 
-# data = 'secret data test test test test test test'.encode()
-# key=gen_key('hejka')
+    for i in x:
+        p = i[0].password
+        print(len(p))
+        print(e.decrypt(p))
 
-# cipher = AES.new(key, AES.MODE_CBC)
-# ct_bytes = cipher.encrypt(pad(data, AES.block_size))
-
-# data = base64.b64encode(cipher.iv + ct_bytes)
-
-# try:
-#     data = base64.b64decode(data)
-#     iv = data[:AES.block_size]
-#     ct = data[AES.block_size:]
-#     cipher = AES.new(key, AES.MODE_CBC, iv)
-#     pt = unpad(cipher.decrypt(ct), AES.block_size)
-#     print("The message was: ", pt.decode())
-# except (ValueError, KeyError):
-#     print("Incorrect decryption")
