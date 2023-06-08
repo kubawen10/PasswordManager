@@ -1,0 +1,4 @@
+greenlet==2.0.2
+pycryptodome==3.18.0
+SQLAlchemy==2.0.15
+typing_extensions==4.6.3
