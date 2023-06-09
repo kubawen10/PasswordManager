@@ -40,7 +40,7 @@ background-color: rgb(61, 56, 70);}</string>
     </property>
     <property name="font">
      <font>
-      <family>Noto Sans</family>
+      <family>Noto Mono</family>
       <pointsize>36</pointsize>
       <weight>75</weight>
       <italic>false</italic>
@@ -49,7 +49,7 @@ background-color: rgb(61, 56, 70);}</string>
     </property>
     <property name="styleSheet">
      <string notr="true">QLabel#welcomeLabel{
-font: 36pt &quot;Noto Sans&quot;;
+font: 36pt &quot;Noto Mono&quot;;
 color: rgb(255, 255, 255);
 font-weight: bold;}</string>
     </property>
@@ -61,7 +61,7 @@ font-weight: bold;}</string>
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>560</y>
+      <y>550</y>
       <width>251</width>
       <height>51</height>
      </rect>
@@ -69,7 +69,7 @@ font-weight: bold;}</string>
     <property name="styleSheet">
      <string notr="true">border-radius: 20px;
 background-color: rgb(222, 221, 218);
-font: 14pt &quot;Noto Sans&quot;;</string>
+font: 14pt &quot;Noto Mono&quot;;</string>
     </property>
     <property name="text">
      <string>Log in</string>
@@ -78,14 +78,15 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLineEdit" name="passwordField">
     <property name="geometry">
      <rect>
-      <x>363</x>
+      <x>263</x>
       <y>470</y>
-      <width>481</width>
+      <width>691</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Noto Mono</family>
       <pointsize>17</pointsize>
      </font>
     </property>
@@ -96,11 +97,16 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>655</y>
-      <width>591</width>
+      <x>200</x>
+      <y>650</y>
+      <width>801</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Noto Mono</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);</string>
@@ -112,11 +118,16 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>405</x>
+      <x>330</x>
       <y>710</y>
-      <width>401</width>
+      <width>531</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Noto Mono</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(237, 51, 59);</string>
@@ -128,11 +139,16 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>675</y>
-      <width>391</width>
+      <x>350</x>
+      <y>670</y>
+      <width>501</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Noto Mono</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);</string>
@@ -144,11 +160,16 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>80</x>
       <y>730</y>
-      <width>821</width>
+      <width>1021</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Noto Mono</family>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(255, 255, 255);</string>
@@ -160,14 +181,19 @@ font: 14pt &quot;Noto Sans&quot;;</string>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>760</y>
-      <width>401</width>
+      <x>340</x>
+      <y>768</y>
+      <width>521</width>
       <height>21</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Noto Mono</family>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 163, 72);</string>
+     <string notr="true">color: rgb(237, 51, 59);</string>
     </property>
     <property name="text">
      <string>Author of this application does not ensure the security of stored data.</string>
@@ -183,7 +209,7 @@ font: 14pt &quot;Noto Sans&quot;;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 15pt &quot;Noto Sans&quot;;
+     <string notr="true">font: 15pt &quot;Noto Mono&quot;;
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
@@ -200,7 +226,7 @@ color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 15pt &quot;Noto Sans&quot;;
+     <string notr="true">font: 15pt &quot;Noto Mono&quot;;
 color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
@@ -210,15 +236,15 @@ color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="passwordError">
     <property name="geometry">
      <rect>
-      <x>365</x>
+      <x>264</x>
       <y>520</y>
-      <width>480</width>
+      <width>691</width>
       <height>31</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(237, 51, 59);
-font: 9pt &quot;Noto Sans&quot;;</string>
+font: 9pt &quot;Noto Mono&quot;;</string>
     </property>
     <property name="text">
      <string/>
@@ -226,6 +252,28 @@ font: 9pt &quot;Noto Sans&quot;;</string>
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>passwordField</tabstop>
+  <tabstop>loginButton</tabstop>
+  <tabstop>bgWidget</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>passwordField</sender>
+   <signal>returnPressed()</signal>
+   <receiver>loginButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>585</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
