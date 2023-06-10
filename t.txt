@@ -1,4 +1,20 @@
-greenlet==2.0.2
-pycryptodome==3.18.0
-SQLAlchemy==2.0.15
-typing_extensions==4.6.3
+QWidget#bgWidget{
+background-color: rgb(61, 56, 70);}
+
+QCheckBox {
+	color: rgb(255, 255, 255);
+	font: 23pt "Noto Mono";
+}
+
+QCheckBox::hover{
+	
+	color: rgb(222, 221, 218);
+}
+
+QCheckBox::indicator:unchecked{
+	image: url(:/icon/icons/unchecked.png);
+}
+
+QCheckBox::indicator:checked{
+	image: url(:/icon/icons/checked.png);
+}

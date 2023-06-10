@@ -1,8 +1,10 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, select
 import os
-from encrpytion.encryption import Encryption
+import string
+import random
 
+from encrpytion.encryption import Encryption
 from . import base
 from . import secret
 
@@ -25,7 +27,7 @@ def create_db():
         base.Base.metadata.create_all(get_engine())
         session.commit()
 
-def validate_master_password(password):
+def validate_master_password(password: str) -> None:
     create_db()
     statement = select(secret.Secret.password)
 
@@ -42,33 +44,21 @@ def validate_master_password(password):
         except:
             return False
         
-def add_new_secret(new_secret):
-    with get_session() as session:
-        session.add(new_secret)
-        session.commit()
+def generate_password(small_letters: bool, capital_letters: bool, digits: bool, special_chars: bool, length: int) -> str:
+    alphabet = ""
 
-    with get_session() as session:
-        return session.query(secret.Secret).order_by(secret.Secret.id.desc()).first()
+    if small_letters:
+        alphabet += string.ascii_lowercase
+
+    if capital_letters:
+        alphabet += string.ascii_uppercase
     
-def update_secret(secret_to_update, name:str, login: str, password: str, notes: str, master_password: str):
-    secret_id = secret_to_update.id
-    with get_session() as session:
-        secret1 = session.query(secret.Secret).get(secret_id)
-        secret1.update_data(name, login, password, notes, master_password)
-        session.commit()
+    if digits:
+        alphabet += string.digits
 
-    with get_session() as session:
-        return session.query(secret.Secret).get(secret_id)
-        
-def delete_secret(secret):
-    with get_session() as session:
-        session.delete(secret)
-        session.commit()
-        
-def get_all_secrets():
-    statement = select(secret.Secret)
-    with get_session() as session:
-        result = session.execute(statement).all()
+    if special_chars:
+        alphabet += string.punctuation
 
-    return result
+    return "".join(random.sample(alphabet, length))
+
 

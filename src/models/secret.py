@@ -1,8 +1,10 @@
 from typing import Any
-from .base import Base
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import Mapped, mapped_column
 from encrpytion.encryption import Encryption
+
+from .base import Base
+from .utils import get_session
 
 class Secret(Base):
     __tablename__ = 'secret'
@@ -39,3 +41,33 @@ class Secret(Base):
 
     def __repr__(self) -> str:
         return f'User(id={self.id!r} name={self.name!r} login={self.login!r})'
+    
+def add_new_secret(new_secret: Secret):
+    with get_session() as session:
+        session.add(new_secret)
+        session.commit()
+
+    with get_session() as session:
+        return session.query(Secret).order_by(Secret.id.desc()).first()
+    
+def update_secret(secret_to_update: Secret, name:str, login: str, password: str, notes: str, master_password: str):
+    secret_id = secret_to_update.id
+    with get_session() as session:
+        secret1 = session.query(Secret).get(secret_id)
+        secret1.update_data(name, login, password, notes, master_password)
+        session.commit()
+
+    with get_session() as session:
+        return session.query(Secret).get(secret_id)
+        
+def delete_secret(secret: Secret):
+    with get_session() as session:
+        session.delete(secret)
+        session.commit()
+        
+def get_all_secrets():
+    statement = select(Secret)
+    with get_session() as session:
+        result = session.execute(statement).all()
+
+    return result
