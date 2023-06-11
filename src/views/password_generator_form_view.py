@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QStackedWidget
 from PyQt5.uic import loadUi
 from models.utils import generate_password
+import os
 
 class PasswordGeneratorFormView(QDialog):
     def __init__(self, parent, stacked_widget: QStackedWidget) -> None:
@@ -8,7 +9,28 @@ class PasswordGeneratorFormView(QDialog):
         self.parent_widget = parent
         self.stacked_widget = stacked_widget
 
-        loadUi('src/uis/passwordGeneratorForm.ui', self)
+        loadUi(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/passwordGeneratorForm.ui'), self)
+
+        self.bgWidget.setStyleSheet('''
+            QCheckBox{{
+                color: rgb(255, 255, 255);
+                font: 20pt "Noto Mono";
+            }}
+
+            QCheckBox:hover{{
+                color: rgb(200, 200, 200);
+            }}
+
+            QCheckBox::indicator:checked{{
+                image: url({0})
+            }}
+
+            QCheckBox::indicator:unchecked{{
+                image: url({1})
+            }}
+        
+        '''.format(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/checked.png'), 
+                   os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/unchecked.png')))
 
         self.generateButton.clicked.connect(self.generate)
 
@@ -28,9 +50,6 @@ class PasswordGeneratorFormView(QDialog):
 
             self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex()-1)
             self.stacked_widget.removeWidget(self)
-
-        
-
 
     def validate_checkboxes(self):
         small_checked = self.smallLetters.isChecked()

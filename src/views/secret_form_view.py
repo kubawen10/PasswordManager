@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QLineEdit, QStackedWidget
 from PyQt5.uic import loadUi
+from PyQt5.QtGui import QIcon
+import os
 
 from models.secret import Secret, add_new_secret, update_secret
 from .password_generator_form_view import PasswordGeneratorFormView
@@ -11,8 +13,10 @@ class SecretFormView(QDialog):
         self.stacked_widget = stacked_widget
         self.master_password = master_password
         self.secret = secret
+        loadUi(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/secretForm.ui'), self)
 
-        loadUi('src/uis/secretForm.ui', self)
+        self.showPasswordButton.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
+        self.generatePasswordButton.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/generate.png')))
 
         self.passwordEdit.setEchoMode(QLineEdit.Password)
         self.showPasswordButton.setCheckable(True)
@@ -34,11 +38,13 @@ class SecretFormView(QDialog):
             self.dialogName.setText('Add secret')
             self.confirmButton.setText('Add')
 
-    def set_password_visibility(self, checked):
+    def set_password_visibility(self, checked: bool):
         if checked:
             self.passwordEdit.setEchoMode(QLineEdit.Normal)
+            self.showPasswordButton.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/hide.png')))
         else:
             self.passwordEdit.setEchoMode(QLineEdit.Password)
+            self.showPasswordButton.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
 
     def set_generated_password(self, password):
         if self.showPasswordButton.isChecked():

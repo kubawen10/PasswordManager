@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QStackedWidget, QLineEdit
 from PyQt5.uic import loadUi
 import string
+import os
 
 from models.utils import validate_master_password
 from .main_view import MainView
@@ -10,7 +11,7 @@ class LoginView(QDialog):
         super(LoginView, self).__init__()
         self.stacked_widget = stacked_widget
         self.stacked_widget.setWindowTitle('Password Manager')
-        loadUi('src/uis/login.ui', self)
+        loadUi(os.path.join(os.path.abspath(os.getcwd()),'src/uis/login.ui'), self)
 
         # TODO: add style hints for this, thera was yt tutorial for it
         self.passwordField.setEchoMode(QLineEdit.Password)

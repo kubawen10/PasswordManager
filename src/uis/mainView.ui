@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#bgWidget{
+	background-color: rgb(61, 56, 70);
+}
+
+QListWidget{
+	background-color: rgb(61, 56, 70);
+}
+
+QPushButton#addSecret{
+border-radius: 20px;
+	background-color: rgb(87, 227, 137);
+	font: 14pt &quot;Noto Mono&quot;;
+}
+
+QPushButton#addSecret:hover{
+	background-color: rgb(46, 194, 126);
+}
+
+
+QLabel {
+	font: 15pt &quot;Noto Mono&quot;;
+	color: rgb(255, 255, 255);
+}</string>
+  </property>
+  <widget class="QWidget" name="bgWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>800</height>
+    </rect>
+   </property>
+   <widget class="QListWidget" name="listWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>1160</width>
+      <height>660</height>
+     </rect>
+    </property>
+    <property name="spacing">
+     <number>5</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addSecret">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>20</y>
+      <width>400</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add secret</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="nameLabel">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>90</y>
+      <width>54</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="loginLabel">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>80</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Login</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="passwordLabel">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>90</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Password</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
