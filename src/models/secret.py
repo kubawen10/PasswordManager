@@ -6,6 +6,7 @@ from encrpytion.encryption import Encryption
 from .base import Base
 from .utils import get_session
 
+# try storing as one string described as len*string-of-len-charas ... eg 3*abc4*abcd...
 class Secret(Base):
     __tablename__ = 'secret'
 

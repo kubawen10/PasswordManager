@@ -1,5 +1,5 @@
 import sys
-import os
+import os   
 import typing
 
 from PyQt5.QtWidgets import QApplication, QStackedWidget
@@ -63,5 +63,8 @@ if __name__ == '__main__':
     #test_backend()
     
     # test
+    
+    # add modification date
+    # add export to csv/json
 
 
