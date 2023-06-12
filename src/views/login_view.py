@@ -1,9 +1,8 @@
-from PyQt5.QtWidgets import QDialog, QStackedWidget, QLineEdit
+from PyQt5.QtWidgets import QDialog, QStackedWidget, QLineEdit, QPushButton, QLabel
 from PyQt5.uic import loadUi
-import string
 import os
 
-from models.utils import validate_master_password
+from utils.password_utils import validate_master_password, is_proper_master_password
 from .main_view import MainView
 
 class LoginView(QDialog):
@@ -11,45 +10,23 @@ class LoginView(QDialog):
         super(LoginView, self).__init__()
         self.stacked_widget = stacked_widget
         self.stacked_widget.setWindowTitle('Password Manager')
+        
         loadUi(os.path.join(os.path.abspath(os.getcwd()),'src/uis/login.ui'), self)
+        self.password_field: QLineEdit = self.findChild(QLineEdit, 'passwordField')
+        self.login_button: QPushButton = self.findChild(QPushButton, 'loginButton')
+        self.password_error_label: QLabel = self.findChild(QLabel, 'passwordError')
 
-        # TODO: add style hints for this, thera was yt tutorial for it
-        self.passwordField.setEchoMode(QLineEdit.Password)
-        self.loginButton.clicked.connect(self.login)
+        self.password_field.setEchoMode(QLineEdit.Password)
+        self.login_button.clicked.connect(self.login)
 
     def login(self) -> None:
         master_password = self.passwordField.text()
 
-        if not self.is_proper_password(master_password):
-            self.passwordError.setText(f"Input at least 8 characters, smaller and upper letters and at least one digit")
+        if not is_proper_master_password(master_password):
+            self.password_error_label.setText(f"Input at least 8 characters, smaller and upper letters, digits and special characters")
         elif validate_master_password(master_password):
             main_screen = MainView(self.stacked_widget, master_password)
             self.stacked_widget.addWidget(main_screen)
             self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
         else:
-            self.passwordError.setText("Incorrect password")
-
-    def is_proper_password(self, master_password: str) -> bool:
-        if len(master_password) < 8:
-            return False
-        
-        lowercase_letters = string.ascii_lowercase
-        uppercase_letters = string.ascii_uppercase
-        digits = string.digits
-
-        has_lower = False
-        has_upper = False
-        has_digit = False
-
-        for char in master_password:
-            if not has_lower and char in lowercase_letters:
-                has_lower = True
-            elif not has_upper and char in uppercase_letters:
-                has_upper = True
-            elif not has_digit and char in digits:
-                has_digit = True
-
-            if has_lower and has_upper and has_digit:
-                return True
-        
-        return False
+            self.password_error_label.setText("Incorrect password")

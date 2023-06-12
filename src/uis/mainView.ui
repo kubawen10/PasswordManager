@@ -76,7 +76,7 @@ QLabel {
    <widget class="QLabel" name="nameLabel">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>35</x>
       <y>90</y>
       <width>54</width>
       <height>17</height>
@@ -89,8 +89,8 @@ QLabel {
    <widget class="QLabel" name="loginLabel">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>80</y>
+      <x>360</x>
+      <y>90</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -102,7 +102,7 @@ QLabel {
    <widget class="QLabel" name="passwordLabel">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>686</x>
       <y>90</y>
       <width>101</width>
       <height>21</height>

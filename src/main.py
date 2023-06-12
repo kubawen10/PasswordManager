@@ -1,6 +1,4 @@
 import sys
-import os   
-import typing
 
 from PyQt5.QtWidgets import QApplication, QStackedWidget
 

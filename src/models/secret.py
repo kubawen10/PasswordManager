@@ -1,8 +1,9 @@
-from typing import Any
-from sqlalchemy import Integer, String, select
+from typing import Any, Tuple
+from sqlalchemy import Integer, LargeBinary, select
 from sqlalchemy.orm import Mapped, mapped_column
-from encrpytion.encryption import Encryption
+from datetime import datetime
 
+from encrpytion.encryption import encrypt, decrypt
 from .base import Base
 from .utils import get_session
 
@@ -11,37 +12,38 @@ class Secret(Base):
     __tablename__ = 'secret'
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String())
-    login: Mapped[str] = mapped_column(String())
-    password: Mapped[str] = mapped_column(String())
-    notes: Mapped[str] = mapped_column(String())
+    secret_bytes: Mapped[bytes] = mapped_column(LargeBinary())
 
     def __init__(self, name:str, login: str, password: str, notes: str, master_password: str) -> None:
-        self._encrypt_data(name, login, password, notes, master_password)
+        creation_time_str = datetime.now().strftime('%d.%m.%Y %H:%M')
+        self._encrypt_data(name, login, password, notes, creation_time_str, master_password)
 
-    def _encrypt_data(self, name:str, login: str, password: str, notes: str, master_password: str):
-        encryption = Encryption(master_password)
+    def _encrypt_data(self, name:str, login: str, password: str, notes: str, time: str,  master_password: str) -> None:
+        joined_str = ''.join([self._get_string_with_len_prefix(field) for field in [name, login, password, notes, time]])
+        self.secret_bytes = encrypt(joined_str, master_password)
 
-        self.name = encryption.encrypt(name)
-        self.login = encryption.encrypt(login)
-        self.password = encryption.encrypt(password)
-        self.notes = encryption.encrypt(notes)
+    def _get_string_with_len_prefix(self, field: str) -> str:
+        return str(len(field)) + '*' + field
 
-    def get_decrypted_data(self, master_password):
-        encryption = Encryption(master_password)
+    def get_decrypted_data(self, master_password: str) -> Tuple[str]:
+        decrypted_joined_data = decrypt(self.secret_bytes, master_password)
 
-        name = encryption.decrypt(self.name)
-        login = encryption.decrypt(self.login)
-        password = encryption.decrypt(self.password)
-        notes = encryption.decrypt(self.notes)
+        number_of_strings_to_retrieve = 5
+        retrieved_strings = []
 
-        return name, login, password, notes
+        for _ in range(number_of_strings_to_retrieve):
+            separator_index = decrypted_joined_data.index('*')
+            cur_str_length = int(decrypted_joined_data[:separator_index])
+            decrypted_joined_data = decrypted_joined_data[separator_index+1:]
+            cur_str = decrypted_joined_data[:cur_str_length]
+            retrieved_strings.append(cur_str)
+            decrypted_joined_data = decrypted_joined_data[cur_str_length:]
+
+        return tuple(retrieved_strings)
     
-    def update_data(self, name:str, login: str, password: str, notes: str, master_password: str):
-        self._encrypt_data(name, login, password, notes, master_password)
-
-    def __repr__(self) -> str:
-        return f'User(id={self.id!r} name={self.name!r} login={self.login!r})'
+    def update_data(self, name:str, login: str, password: str, notes: str, master_password: str) -> None:
+        update_date = datetime.now().strftime('%d.%m.%Y %H:%M')
+        self._encrypt_data(name, login, password, notes, update_date, master_password)
     
 def add_new_secret(new_secret: Secret):
     with get_session() as session:
@@ -49,17 +51,21 @@ def add_new_secret(new_secret: Secret):
         session.commit()
 
     with get_session() as session:
-        return session.query(Secret).order_by(Secret.id.desc()).first()
+        result = session.query(Secret).order_by(Secret.id.desc()).first()
+
+    return result
     
 def update_secret(secret_to_update: Secret, name:str, login: str, password: str, notes: str, master_password: str):
     secret_id = secret_to_update.id
     with get_session() as session:
-        secret1 = session.query(Secret).get(secret_id)
-        secret1.update_data(name, login, password, notes, master_password)
+        secret = session.query(Secret).get(secret_id)
+        secret.update_data(name, login, password, notes, master_password)
         session.commit()
 
     with get_session() as session:
-        return session.query(Secret).get(secret_id)
+        result = session.query(Secret).get(secret_id)
+
+    return result
         
 def delete_secret(secret: Secret):
     with get_session() as session:
@@ -67,8 +73,13 @@ def delete_secret(secret: Secret):
         session.commit()
         
 def get_all_secrets():
-    statement = select(Secret)
     with get_session() as session:
-        result = session.execute(statement).all()
+        result = session.query(Secret).all()
+
+    return result
+
+def get_first_secret():
+    with get_session() as session:
+        result = session.query(Secret).first()
 
     return result

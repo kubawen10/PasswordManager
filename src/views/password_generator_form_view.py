@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QDialog, QStackedWidget
+from PyQt5.QtWidgets import QDialog, QStackedWidget, QCheckBox, QPushButton, QLabel
 from PyQt5.uic import loadUi
-from models.utils import generate_password
+
 import os
+from utils.password_utils import generate_password
 
 class PasswordGeneratorFormView(QDialog):
     def __init__(self, parent, stacked_widget: QStackedWidget) -> None:
@@ -10,6 +11,13 @@ class PasswordGeneratorFormView(QDialog):
         self.stacked_widget = stacked_widget
 
         loadUi(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/passwordGeneratorForm.ui'), self)
+        self.small_letters_checkbox: QCheckBox = self.findChild(QCheckBox, 'smallLetters')
+        self.capital_letters_checkbox: QCheckBox = self.findChild(QCheckBox, 'capitalLetters')
+        self.digits_checkbox: QCheckBox = self.findChild(QCheckBox, 'digits')
+        self.special_chars_checkbox: QCheckBox = self.findChild(QCheckBox, 'specialChars')
+        self.generate_password_button: QPushButton = self.findChild(QPushButton, 'generateButton')
+        self.generation_error_label: QLabel = self.findChild(QLabel, 'generationError')
+        self.password_length_label: QLabel = self.findChild(QLabel, 'passwordLength')
 
         self.bgWidget.setStyleSheet('''
             QCheckBox{{
@@ -32,17 +40,17 @@ class PasswordGeneratorFormView(QDialog):
         '''.format(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/checked.png'), 
                    os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/unchecked.png')))
 
-        self.generateButton.clicked.connect(self.generate)
+        self.generate_password_button.clicked.connect(self.generate)
 
     def generate(self):
         if not self.validate_checkboxes():
-            self.generationError.setText("Pick at least one checkbox.")
+            self.generation_error_label.setText("Pick at least one checkbox.")
         else:
-            small_checked = self.smallLetters.isChecked()
-            capital_checked = self.capitalLetters.isChecked()
-            digits_checked = self.digits.isChecked()
-            special_checked = self.specialChars.isChecked()
-            password_length = int(self.passwordLength.text())
+            small_checked = self.small_letters_checkbox.isChecked()
+            capital_checked = self.capital_letters_checkbox.isChecked()
+            digits_checked = self.digits_checkbox.isChecked()
+            special_checked = self.special_chars_checkbox.isChecked()
+            password_length = int(self.password_length_label.text())
 
             password = generate_password(small_checked, capital_checked, digits_checked, special_checked, password_length)
 
@@ -52,10 +60,10 @@ class PasswordGeneratorFormView(QDialog):
             self.stacked_widget.removeWidget(self)
 
     def validate_checkboxes(self):
-        small_checked = self.smallLetters.isChecked()
-        capital_checked = self.capitalLetters.isChecked()
-        digits_checked = self.digits.isChecked()
-        special_checked = self.specialChars.isChecked()
+        small_checked = self.small_letters_checkbox.isChecked()
+        capital_checked = self.capital_letters_checkbox.isChecked()
+        digits_checked = self.digits_checkbox.isChecked()
+        special_checked = self.special_chars_checkbox.isChecked()
 
         return small_checked or capital_checked or digits_checked or special_checked
             
