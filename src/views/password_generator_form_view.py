@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QStackedWidget, QCheckBox, QPushButton, QLabel
 from PyQt5.uic import loadUi
 
-import os
 from utils.password_utils import generate_password
+from utils.ui_utils import get_ui_file, get_icon_file
 
 class PasswordGeneratorFormView(QDialog):
     def __init__(self, parent, stacked_widget: QStackedWidget) -> None:
@@ -10,7 +10,7 @@ class PasswordGeneratorFormView(QDialog):
         self.parent_widget = parent
         self.stacked_widget = stacked_widget
 
-        loadUi(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/passwordGeneratorForm.ui'), self)
+        loadUi(get_ui_file('passwordGeneratorForm.ui'), self)
         self.small_letters_checkbox: QCheckBox = self.findChild(QCheckBox, 'smallLetters')
         self.capital_letters_checkbox: QCheckBox = self.findChild(QCheckBox, 'capitalLetters')
         self.digits_checkbox: QCheckBox = self.findChild(QCheckBox, 'digits')
@@ -37,8 +37,8 @@ class PasswordGeneratorFormView(QDialog):
                 image: url({1})
             }}
         
-        '''.format(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/checked.png'), 
-                   os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/unchecked.png')))
+        '''.format(get_icon_file('checked.png'), 
+                   get_icon_file('unchecked.png')))
 
         self.generate_password_button.clicked.connect(self.generate)
 

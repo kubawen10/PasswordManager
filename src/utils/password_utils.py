@@ -1,8 +1,8 @@
 import string
 import random
-from models.utils import create_db
+
 from encrpytion.encryption import decrypt
-from models.secret import get_first_secret
+from models.queries import get_first_secret
 
 def is_proper_master_password(master_password: str) -> bool:
         if len(master_password) < 8:
@@ -34,7 +34,6 @@ def is_proper_master_password(master_password: str) -> bool:
         return False
 
 def validate_master_password(master_password: str) -> None:
-    create_db()
     first_secret = get_first_secret()
 
     if first_secret is None:

@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QStackedWidget, QLineEdit, QPushButton, QLabel
 from PyQt5.uic import loadUi
-import os
 
 from utils.password_utils import validate_master_password, is_proper_master_password
+from utils.ui_utils import get_ui_file
 from .main_view import MainView
 
 class LoginView(QDialog):
@@ -11,7 +11,7 @@ class LoginView(QDialog):
         self.stacked_widget = stacked_widget
         self.stacked_widget.setWindowTitle('Password Manager')
         
-        loadUi(os.path.join(os.path.abspath(os.getcwd()),'src/uis/login.ui'), self)
+        loadUi(get_ui_file('login.ui'), self)
         self.password_field: QLineEdit = self.findChild(QLineEdit, 'passwordField')
         self.login_button: QPushButton = self.findChild(QPushButton, 'loginButton')
         self.password_error_label: QLabel = self.findChild(QLabel, 'passwordError')

@@ -32,6 +32,18 @@ QPushButton#addSecret:hover{
 	background-color: rgb(46, 194, 126);
 }
 
+QPushButton#exportButton{
+	border-radius: 20px;
+
+	background-color: rgb(98, 160, 234);
+	font: 14pt &quot;Noto Mono&quot;;
+}
+
+QPushButton#exportButton:hover{
+	
+	background-color: rgb(53, 132, 228);
+}
+
 
 QLabel {
 	font: 15pt &quot;Noto Mono&quot;;
@@ -110,6 +122,19 @@ QLabel {
     </property>
     <property name="text">
      <string>Password</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exportButton">
+    <property name="geometry">
+     <rect>
+      <x>1037</x>
+      <y>20</y>
+      <width>110</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Export</string>
     </property>
    </widget>
   </widget>

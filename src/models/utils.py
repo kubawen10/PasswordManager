@@ -1,12 +1,9 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 import os
-import string
-import random
 
-from encrpytion.encryption import encrypt, decrypt
-from . import base
-from . import secret
+from .base import Base
+from .secret import Secret
 
 def get_db_file() -> str:
     bd_directory = os.path.expanduser('~/.password_manager')
@@ -24,7 +21,7 @@ def get_session():
 
 def create_db():
     with get_session() as session:
-        base.Base.metadata.create_all(get_engine())
+        Base.metadata.create_all(get_engine())
         session.commit()
 
 

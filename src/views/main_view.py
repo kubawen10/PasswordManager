@@ -1,9 +1,13 @@
-from PyQt5.QtWidgets import QDialog, QStackedWidget, QListWidget, QPushButton, QHBoxLayout, QLabel, QVBoxLayout, QListWidgetItem, QWidget, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QDialog, QStackedWidget, QListWidget, QPushButton, QHBoxLayout, QLabel, QVBoxLayout, QListWidgetItem, QWidget, QLineEdit, QMessageBox, QFileDialog
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
+import json
 import os
+import pyperclip
 
-from models.secret import Secret, get_all_secrets, delete_secret
+from utils.ui_utils import get_ui_file, get_icon_file
+from models.secret import Secret
+from models.queries import get_all_secrets, delete_secret
 from .secret_form_view import SecretFormView
 
 
@@ -13,16 +17,21 @@ class MainView(QDialog):
         self.stacked_widget = stacked_widget
         self.master_password = master_password
 
-        loadUi(os.path.join(os.path.abspath(os.getcwd()),'src/uis/mainView.ui'), self)
+        loadUi(get_ui_file('mainView.ui'), self)
         self.add_secret_button: QPushButton = self.findChild(QPushButton, 'addSecret')
+        self.export_button: QPushButton = self.findChild(QPushButton, 'exportButton')
         self.list_of_secrets: QListWidget = self.findChild(QListWidget, 'listWidget')
 
+        self.export_button.setToolTip('Export secrets to json file')
+
         self.list_of_secrets.setSpacing(5)
+        self.list_of_secrets.setSelectionRectVisible(False)
 
         for secret in get_all_secrets():
             self.add_secret_to_list(secret)
 
         self.add_secret_button.clicked.connect(self.goto_add_secret_form)
+        self.export_button.clicked.connect(self.export_secrets)
 
 
     def add_secret_to_list(self, secret: Secret) -> None:
@@ -36,6 +45,22 @@ class MainView(QDialog):
         form = SecretFormView(self, self.stacked_widget, self.master_password)
         self.stacked_widget.addWidget(form)
         self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
+    
+    def export_secrets(self):
+        list_of_secrets = [{'comment': 'remember that double quotes are preceded with backslash character in json so you need to remove them if you want to get the actual string'}]
+        for index in range(self.list_of_secrets.count()):
+            item = self.list_of_secrets.item(index)
+            cur_secret: Secret = self.list_of_secrets.itemWidget(item).secret
+            name, login, password, notes, date = cur_secret.get_decrypted_data(self.master_password)
+            list_of_secrets.append({'name': name, 'login': login, 'password': password, 'notes': notes, 'modification_date': date})
+          
+        home_dir = os.path.expanduser('~')
+        name = QFileDialog.getSaveFileName(self, 'Save file', home_dir, 'JSON Files (*.json)')
+        file_name = name[0]
+
+        if file_name != '' :
+            with open(file_name, 'w') as json_file:
+                json.dump(list_of_secrets, json_file, indent=4)
 
 
 class SecretWidget(QWidget):
@@ -60,40 +85,37 @@ class SecretWidget(QWidget):
         self.password_label.setEchoMode(QLineEdit.Password)
 
         self.show_password_button = QPushButton()
-        self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
+        self.show_password_button.setIcon(QIcon(get_icon_file('show.png')))
         self.show_password_button.setCheckable(True)
         self.show_password_button.setToolTip('Show password')
         self.show_password_button.clicked.connect(self.set_password_visibility)
 
         self.copy_to_clipboard_button = QPushButton()
-        self.copy_to_clipboard_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/copy.png')))
+        self.copy_to_clipboard_button.setIcon(QIcon(get_icon_file('copy.png')))
         self.copy_to_clipboard_button.setToolTip('Copy password to clipboard')
+        self.copy_to_clipboard_button.clicked.connect(self.copy_to_clipboard)
 
         self.show_notes_button = QPushButton()
-        self.show_notes_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/notes.png')))
+        self.show_notes_button.setIcon(QIcon(get_icon_file('notes.png')))
         self.show_notes_button.setToolTip('Show secret notes')
+        self.show_notes_button.clicked.connect(self.show_notes)
 
         self.update_secret_button = QPushButton()
-        self.update_secret_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/edit.png')))
+        self.update_secret_button.setIcon(QIcon(get_icon_file('edit.png')))
         self.update_secret_button.setToolTip('Edit secret')
         self.update_secret_button.clicked.connect(self.goto_update_form)
 
         self.delete_secret_button = QPushButton()
-        self.delete_secret_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/delete.png')))
+        self.delete_secret_button.setIcon(QIcon(get_icon_file('delete.png')))
         self.delete_secret_button.setToolTip('Delete password')
         self.delete_secret_button.clicked.connect(self.delete_secret)
+
+        for button in [self.show_password_button, self.copy_to_clipboard_button, self.show_notes_button, self.update_secret_button, self.delete_secret_button]:
+            button.setStyleSheet('QPushButton{background-color: rgb(94, 92, 100); width: 26px; height: 26px; border-radius: 13px} QPushButton:hover{background-color: rgb(119, 118, 123);}')
 
         self.set_fields(secret)
 
         self.setStyleSheet('''
-            QPushButton#addSecret{
-                background-color: rgb(94, 92, 100);
-                border-radius: 13px;
-                font: 20pt "Noto Mono";
-                width: 26px;
-                height: 26px;
-            }
-
             QPushButton:hover{
                 background-color: rgb(119, 118, 123);
             }
@@ -110,7 +132,6 @@ class SecretWidget(QWidget):
 
             QMessageBox {
                 background-color: rgb(61, 56, 70);
-                
             }
         
         ''')
@@ -130,10 +151,16 @@ class SecretWidget(QWidget):
     def set_password_visibility(self, checked: bool) -> None:
         if checked:
             self.password_label.setEchoMode(QLineEdit.Normal)
-            self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/hide.png')))
+            self.show_password_button.setIcon(QIcon(get_icon_file('hide.png')))
         else:
             self.password_label.setEchoMode(QLineEdit.Password)
-            self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
+            self.show_password_button.setIcon(QIcon(get_icon_file('show.png')))
+
+    def copy_to_clipboard(self):
+        pyperclip.copy(self.password_label.text())
+
+    def show_notes(self):
+        QMessageBox.about(self, 'Secret notes', self.notes)
 
     def goto_update_form(self) -> None:
         form = SecretFormView(self, self.stacked_widget, self.master_password, self.secret)
@@ -164,6 +191,7 @@ class SecretWidget(QWidget):
         self.login_label.setText(login)
         self.password_label.setText(password)
         self.password_label.setToolTip('Modification time: ' + modification_time)
+        self.notes = notes
 
         # add notes button text
     

@@ -1,10 +1,11 @@
 from PyQt5.QtWidgets import QDialog, QLineEdit, QStackedWidget, QPushButton, QTextEdit, QLabel
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon
-import os
 
-from models.secret import Secret, add_new_secret, update_secret
+from models.secret import Secret
+from models.queries import add_new_secret, update_secret
 from .password_generator_form_view import PasswordGeneratorFormView
+from utils.ui_utils import get_ui_file, get_icon_file
 
 class SecretFormView(QDialog):
     def __init__(self, parent, stacked_widget: QStackedWidget, master_password: str, secret: Secret | None = None) -> None:
@@ -14,7 +15,7 @@ class SecretFormView(QDialog):
         self.master_password = master_password
         self.secret = secret
 
-        loadUi(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/secretForm.ui'), self)
+        loadUi(get_ui_file('secretForm.ui'), self)
         self.form_title: QLabel = self.findChild(QLabel, 'dialogName')
         self.name_field: QLineEdit = self.findChild(QLineEdit, 'nameEdit')
         self.login_field: QLineEdit = self.findChild(QLineEdit, 'loginEdit')
@@ -26,8 +27,8 @@ class SecretFormView(QDialog):
         self.cancel_button: QPushButton = self.findChild(QPushButton, 'cancelButton')
         self.confirm_button: QPushButton = self.findChild(QPushButton, 'confirmButton')
 
-        self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
-        self.generate_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/generate.png')))
+        self.show_password_button.setIcon(QIcon(get_icon_file('show.png')))
+        self.generate_password_button.setIcon(QIcon(get_icon_file('generate.png')))
 
         self.password_field.setEchoMode(QLineEdit.Password)
         self.show_password_button.setCheckable(True)
@@ -53,10 +54,10 @@ class SecretFormView(QDialog):
     def set_password_visibility(self, checked: bool):
         if checked:
             self.password_field.setEchoMode(QLineEdit.Normal)
-            self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/hide.png')))
+            self.show_password_button.setIcon(QIcon(get_icon_file('hide.png')))
         else:
             self.password_field.setEchoMode(QLineEdit.Password)
-            self.show_password_button.setIcon(QIcon(os.path.join(os.path.abspath(os.getcwd()), 'src/uis/icons/show.png')))
+            self.show_password_button.setIcon(QIcon(get_icon_file('show.png')))
 
     def set_generated_password(self, password):
         if self.show_password_button.isChecked():
