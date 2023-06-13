@@ -1,0 +1,8 @@
+greenlet==2.0.2
+pycryptodome==3.18.0
+pyperclip==1.8.2
+PyQt5==5.15.9
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.12.1
+SQLAlchemy==2.0.15
+typing_extensions==4.6.3
