@@ -1,0 +1,6 @@
+-C package
+-s dir
+-t deb
+-n "PasswordManager"
+-v 0.1.0
+-p password-manager.deb

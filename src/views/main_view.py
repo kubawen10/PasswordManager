@@ -160,7 +160,7 @@ class SecretWidget(QWidget):
         pyperclip.copy(self.password_label.text())
 
     def show_notes(self):
-        QMessageBox.about(self, 'Secret notes', self.notes)
+        QMessageBox.information(self, 'Secret notes', self.notes)
 
     def goto_update_form(self) -> None:
         form = SecretFormView(self, self.stacked_widget, self.master_password, self.secret)
