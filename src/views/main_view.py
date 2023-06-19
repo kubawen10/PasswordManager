@@ -59,8 +59,8 @@ class MainView(QDialog):
         file_name = name[0]
 
         if file_name != '' :
-            with open(file_name, 'w') as json_file:
-                json.dump(list_of_secrets, json_file, indent=4)
+            with open(file_name, 'w', encoding='utf-8') as json_file:
+                json.dump(list_of_secrets, json_file, indent=4, ensure_ascii=False)
 
 
 class SecretWidget(QWidget):

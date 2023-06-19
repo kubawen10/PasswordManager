@@ -27,6 +27,8 @@ You can install the application on your machine.
 
 Instalation was tested only on ubuntu. If you want to install it on other systems feel free to modify the files as you need.
 
+You can try using build.sh but I am not sure if it works since it was done in 5 minutes in order to get better grade. It joins the following section into one script.
+
 ### Venv and requirements
 ```bash
 python3 -m venv .venv
