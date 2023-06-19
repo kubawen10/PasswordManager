@@ -3,6 +3,8 @@ Project for Scripting Languages laboratory course at Wrocław University of Scie
 
 PasswordManager allows user to securely store secrets in database using simple GUI.
 
+It uses AES for encryption, PyQt5 for GUI and sqlite3 for database.
+
 # Using the application
 ## Cloning the project
 ```bash
